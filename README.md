@@ -1,5 +1,5 @@
 # Any file to PDF converter
-Most file types to PDF converter service. Uses libreoffice for most convertions.
+Most file types to PDF converter service.
 
 ## Deployment
 Assure port 5000 is not being used.

@@ -2,15 +2,16 @@
 Most file types to PDF converter service.
 
 ## Deployment
-Assure port 5000 is not being used.
-
-1. Build the docker image:
+Converter service can be easily deployed with the following command:
 ```bash
-docker build . -t topdf
+docker compose up -d
 ```
-2. Run the image via:
+Stop service command:
 ```bash
-docker run -d -p 5000:5000 --rm --name topdf topdf
+docker compose down
 ```
 
-## Usage 
+> NOTE: Assure port 5000 is not being used.
+
+## Usage
+

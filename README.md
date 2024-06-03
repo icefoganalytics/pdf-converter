@@ -14,7 +14,6 @@ docker compose down
 > NOTE: Assure port 5000 is not being used.
 
 ## Usage
-In the following replace 
 ### Single file conversions
 1. `cURL`
 ```bash
@@ -46,4 +45,6 @@ let outputFile = res.data;  // PDF buffer
 // Save to file?
 await fs.writeFile('/path/to/output/file.pdf', outputFile);
 ```
+### Bunch file conversions
+Currently not implemented
 

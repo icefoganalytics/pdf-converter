@@ -22,8 +22,8 @@ app.post("/", async (req, res) => {
         console.log("Error?");
     }*/
     console.log("[/] recv");
+    console.log("req.files: ", req.files);
     if(req.files){
-        console.log(req.files);
         console.log("[/] Sending pdf buffer to client...");
         
         let inputFilePath = req.files.files.tempFilePath;

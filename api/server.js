@@ -4,11 +4,14 @@ import fileUpload from "express-fileupload";
 import { topdf, topdfStream } from "../src/topdf.js";
 
 const app = express();
+app.use(fileUpload({ debug: true }));
+/*
 app.use(fileUpload({
     debug: true,
     useTempFiles: true,
     tempFileDir: '/tmp/'
 }));
+*/
 
 const PORT = 5000;
 
@@ -21,19 +24,25 @@ app.post("/", async (req, res) => {
     } else {
         console.log("Error?");
     }*/
+    
     console.log("[/] recv");
-    console.log("req.files: ", req.files);
-    if(req.files){
-        console.log("[/] Sending pdf buffer to client...");
+    try {
+        console.log("req.files: ", req.files);
+        if(req.files){
+            console.log("[/] Sending pdf buffer to client...");
         
-        let inputFilePath = req.files.files.tempFilePath;
-        let pdfBuffer = await topdf(inputFilePath);
+            let inputFilePath = req.files.files.tempFilePath;
+            let pdfBuffer = await topdf(inputFilePath);
 
-        res.setHeader('Content-Type', 'application/pdf');
-        res.status(200).send(pdfBuffer);
-    } else {
-        res.status(400).send("No input files given.");
-        console.log("[/] Bad reqest");
+            res.setHeader('Content-Type', 'application/pdf');
+            res.status(200).send(pdfBuffer);
+        } else {
+            res.status(400).send("No input files given.");
+            console.log("[/] Bad reqest");
+        }
+    } catch(err){
+        console.error(err);
+        res.sendStatus(500);
     }
     console.log("[/] recv end");
 });

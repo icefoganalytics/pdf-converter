@@ -1,21 +1,15 @@
-import express from "express";
-import fileUpload from "express-fileupload";
+import express from 'express';
+import fileUpload from 'express-fileupload';
 
-import { topdf, topdfStream } from "../src/topdf.js";
+import { topdf, topdfStream } from '../src/topdf.js';
+import { isSupportedMimeType } from './supported_mime_types.js';
 
 const app = express();
 app.use(fileUpload({ debug: true }));
-/*
-app.use(fileUpload({
-    debug: true,
-    useTempFiles: true,
-    tempFileDir: '/tmp/'
-}));
-*/
 
 const PORT = 5000;
 
-app.post("/", async (req, res) => {
+app.post('/', async (req, res) => {
     /*
     if (req.files) {
         let files = Array.isArray(req.files.files) ? req.files.files : [req.files.files];
@@ -24,34 +18,41 @@ app.post("/", async (req, res) => {
     } else {
         console.log("Error?");
     }*/
-    
-    console.log("[/] recv");
-    try {
-        console.log("req.files: ", req.files);
-        if(req.files){
-            console.log("[/] Sending pdf buffer to client...");
         
-            let inputFilePath = req.files.files.tempFilePath;
-            let pdfBuffer = await topdf(inputFilePath);
+    console.log('[/] recv');
+    try {
+        console.log('req.files: ', req.files);
+        if(req.files){
+            let mimeType = req.files.files.mimetype;
+            
+            // Checks if mimeType is supported by libreoffice
+            if(!isSupportedMimeType(mimeType)){
+                res.status(400).send('Input file type is not supported for pdf conversion.');
+                return;
+            }
 
+            let inputFileBuffer = req.files.files.data;
+            let pdfBuffer = await topdfStream(inputFileBuffer);
+            
+            console.log('[/] Sending pdf buffer to client...');
             res.setHeader('Content-Type', 'application/pdf');
             res.status(200).send(pdfBuffer);
         } else {
-            res.status(400).send("No input files given.");
-            console.log("[/] Bad reqest");
+            res.status(400).send('No input files given.');
+            console.log('[/] Bad reqest');
         }
     } catch(err){
         console.error(err);
         res.sendStatus(500);
     }
-    console.log("[/] recv end");
+    console.log('[/] recv end');
 });
 
-app.get("/", (req, res) => { res.sendStatus(400); });
+app.get('/', (req, res) => { res.sendStatus(400); });
 
-app.get("/test", (req, res) => {
+app.get('/test', (req, res) => {
     res.status(200).send("hello");
-    console.log("[/test] hello");
+    console.log('[/test] pass');
 });
 
 app.listen(PORT, () => { console.log(`Server listening on port ${PORT}`); });

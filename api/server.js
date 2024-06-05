@@ -23,17 +23,17 @@ app.post('/', async (req, res) => {
     try {
         console.log('req.files: ', req.files);
         if(req.files){
+            let inputFileBuffer = req.files.files.data;
             let mimeType = req.files.files.mimetype;
-            
+
             // Checks if mimeType is supported by libreoffice
             if(!isSupportedMimeType(mimeType)){
-                console.log('[/] MIME type not supported.');
+                console.log(`[/] MIME type not supported: ${mimeType}`);
                 res.status(400).send('Input file type is not supported for pdf conversion.');
                 return;
             }
             console.log('[/] MIME type supported.');
 
-            let inputFileBuffer = req.files.files.data;
             let pdfBuffer = await topdfStream(inputFileBuffer);
             
             console.log('[/] Sending PDF buffer to client...');

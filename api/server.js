@@ -30,7 +30,7 @@ app.post('/', async (req, res) => {
             // Checks if mimeType is supported by libreoffice
             if(!isSupportedMimeType(inputFileType.mime)){
                 console.log(`[/] MIME type not supported: ${inputFileType.mime}`);
-                res.status(400).send('Input file type is not supported for pdf conversion.');
+                res.status(415).send('Input file type is not supported for pdf conversion.');
                 return;
             }
             console.log(`[/] MIME type supported: ${inputFileType.mime}`);

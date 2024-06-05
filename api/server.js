@@ -1,5 +1,6 @@
 import express from 'express';
 import fileUpload from 'express-fileupload';
+import { fileTypeFromBuffer } from 'file-type';
 
 import { topdf, topdfStream } from '../src/topdf.js';
 import { isSupportedMimeType } from './supported_mime_types.js';
@@ -24,10 +25,10 @@ app.post('/', async (req, res) => {
         console.log('req.files: ', req.files);
         if(req.files){
             let inputFileBuffer = req.files.files.data;
-            let mimeType = req.files.files.mimetype;
+            let inputFileType = await fileTypeFromBuffer(inputFileBuffer);
 
             // Checks if mimeType is supported by libreoffice
-            if(!isSupportedMimeType(mimeType)){
+            if(!isSupportedMimeType(inputFileType.mime)){
                 console.log(`[/] MIME type not supported: ${mimeType}`);
                 res.status(400).send('Input file type is not supported for pdf conversion.');
                 return;

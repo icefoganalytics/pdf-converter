@@ -24,5 +24,8 @@
     "express-fileupload": "^1.5.0",
     "file-type": "^19.0.0",
     "libreoffice-convert": "^1.5.1"
+  },
+  "imports": {
+    "@": "."
   }
 }

@@ -7,8 +7,8 @@ libreoffice.convertAsync = promisify(libreoffice.convert);
 /**
  * Converts file to pdf
  * @param inputPath Filepath to file to be converted
- * @param outputPath Filepath to dump the pdf after converted 
- * @return None
+ * @param outputBuffer Filepath to dump the pdf after converted 
+ * @return {Buffer}
  */
 export async function topdf(inputPath){
     const ext = "pdf";

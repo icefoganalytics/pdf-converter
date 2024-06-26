@@ -23,7 +23,7 @@ RUN rm -f gf.tar.gz
 RUN fc-cache -f && rm -rf /var/cache/*
 
 # Configure working env
-WORKDIR /root/env
+WORKDIR /usr/src/app
 
 COPY package*.json .
 COPY api/ ./api
@@ -31,6 +31,4 @@ COPY src/ ./src
 RUN npm i
 
 EXPOSE 5000
-ENTRYPOINT ["npm", "run", "deploy"]
-# /ENTRYPOINT ["npm", "run", "dev"]
-
+CMD ["npm", "run", "deploy"]

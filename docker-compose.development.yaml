@@ -1,0 +1,7 @@
+services:
+  topdf:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "5000:5000"
